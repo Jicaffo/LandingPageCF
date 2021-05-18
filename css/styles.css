@@ -1,0 +1,372 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+
+/*********************************************
+TIPS:
+
+- Siempre que se pueda conviene utilizar medidas "em" o "rem" en vez de "px", ya que se calculan en base al tamaño de la fuente base, y si el usuario agranda la fuente por un problema de visión o cualquier necesidad especial al usar em las relaciones se mantienen en vez de quedar en un valor fijo y descompaginar toda la página. Em la relaciona con el tamaño del texto del elemento seleccionado, mientras que rem la relaciona con el tamaño del texto del body. valorEm = valorPx / tamañoLetraEnPx.
+
+********************************************/
+
+
+/****************************************/
+/* Custom properties (variables de CSS) */
+/****************************************/
+/* Es para poner solo los valores que sabes que pueden cambiar, que son dinámicos. */
+:root {
+    --yellow: #FFC93C;
+    --grey: #E3E3E3;
+    --white: white;
+    --blue: RGB(1,89,152);
+}
+
+
+
+
+/********************/
+/* ESTILOS GLOBALES */
+/********************/
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box; /* Hace que cuando le indicamos que ocupe el 100%, tome en cuenta dentro de este porcentaje tambien el espacio que ocupan los paddings*/
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+}
+
+img {
+    max-width: 100%; /*Hace que las imágenes ocupen un ancho máximo del 100% de su contenedor (que no se desborden)*/
+}
+
+button {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--blue);
+    color: var(--white);
+    width: 10em;
+    height: 2.5em;
+    border-radius: 0.7em;
+    border-style: none;
+    box-shadow: 2px 2px 2px black
+}
+
+
+/***********************/
+/* ESTILOS DE UTILIDAD */
+/***********************/
+.container {
+    width: 60em; /* 60em x 16px de la fuente base = 960px) */
+    max-width: 100%;
+    margin: 0 auto; /* para centrarlo*/
+}
+
+.center-vertical-and-horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title, h1 {
+    font-size: 4rem; /*(la original la tenía en 64px que /16 da 4)*/
+    text-align: center;
+}
+
+.subtitle, h2 {
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.item-subtitle{
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.main-grid { /* TODO: No está funcionando bien en mobile por el momento reemplazada por .reemplazo-grid*/
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0,1fr));
+}
+
+.reemplazo-grid{
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+}
+
+.section-padding {
+    padding: 4.25rem 2rem;
+}
+
+.side-padding {
+    padding-inline: 2rem;
+}
+
+.bg-yellow {
+    background-color: var(--yellow);
+}
+
+.bg-grey {
+    background-color: var(--grey);
+}
+
+/*.yellow-underline {
+   text-decoration: underline;
+   text-decoration-color: var(--yellow);
+} /* Version más simple sin pseudoelementos, la linea se corta debajo de las "p" */
+
+.yellow-underline {
+    position: relative;
+    display: inline-block; /* Es necesario? No como lo hice yo, pero si como lo hizo él */
+    z-index: 1;
+}
+
+.yellow-underline::before {
+    position: absolute;
+    content: '';
+    bottom: 0;
+    left: 0;
+    height: 0.56rem; /*(9px / 16 = 0.56). Si acá no usaramos rem, como la letra del elemento es más grande que 16, lo haría mucho más grande*/
+    background-color: var(--yellow); /* utilización de variables */
+    width: 100%;
+    z-index: -1;
+} /*Esto sería un pseudoelemento. con z-index hago que esté delante o detrás de la palabra*/
+
+.espaciado-simple {
+    display: flex;
+    flex-direction: column;
+    gap: 1em    
+}
+
+.max100 { /* Ver si sirve usarlo en algún lado */
+    max-width: 100%;
+}
+
+/**************************/
+/* ESTILOS DE COMPONENTES */
+/**************************/
+
+/* Diseñamos mobile first, primero armandolo para celular y luego completando con Media Queries la adaptación a otras pantallas*/
+
+.text-and-image { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 2em; /* 2em x 16px de la fuente base = 32px)*/
+}
+
+.text-and-image .actions { 
+    margin-bottom: 4.25em;
+}
+
+.text-and-image.cover { 
+    padding-bottom: 0%;
+}
+
+.text-and-image .main-content{
+    /*flex-grow: 1; /* hace que ocupe todo el ancho disponible y la imagen sólo lo que necesita, TODO: a investigar. Si hay 2 elementos con flex-grow = 1 los divide en partes iguales. Si uno tiene 2 y otro 1, asigna 2/3 y 1/3 respectivamente. */
+    /*display: flex;
+    flex-direction: column; /* Hasta acá fue como arrancó, despues cambió a grid*/
+    display: grid;
+    gap: 3em;
+    flex-grow: 1;
+    grid-template-rows: auto minmax(0,1fr) auto;
+    justify-items: center;
+
+}
+
+.text-and-image .main-content header {
+    flex-grow: 1;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
+}
+
+.avatar {
+    border-radius: 50%;
+    width: 50vw; /* Mejor que ponerlo fijo en 300px, pero se sigue deformando en tamaños chicos */
+    height: 50vw;
+    object-fit: cover; /* Para que la imagen no se estire o comprima */
+    /*object-position: 0px -170px; /* Desplazamiento hacia la derecha y hacia abajo (pueden ser negativos */
+    align-self: center;
+    
+}
+
+/* EMPIEZA LO QUE MODIFIQUE */
+.elements-with-images {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.elements-with-images .text {
+    text-align: center;
+}
+
+.images {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 2em;
+    flex-wrap: wrap;
+}
+
+.images img:nth-child(odd) {
+    padding-left: 20%;
+}
+
+.images img:nth-child(even) {
+    padding-right: 20%;
+}
+
+/* TERMINA LO QUE MODIFIQUÉ */
+
+
+.items {
+    gap: 3em;
+}
+
+.items header {
+    grid-column: span 12;
+}
+
+.items .item {
+    grid-column: span 12;
+    background-color: var(--white);
+}
+
+.item {
+    border-radius: 1.3em;
+    overflow: hidden;/**/
+}
+
+.item .background {
+    /* Al poner la imagen como fondo, logramos manejarla por porcentajes sin tener que poner valores hardcodeados como en el avatar */
+    width: 105%; /*debería ser 100%, está agrandada para compensar bordes redondeados*/
+    padding-bottom: 67%; /* Este valor estará calculado a partir de la relación de aspecto de la imagen (3:2 = 2/3 = 0.67 = 67%). Al estar basado en un ancho porcentual y a su vez tener un padding calculado a partir de ese ancho, la imagen de fondo adapta su tamaño respetando su relación de aspecto según la necesidad */
+    background-position: -0.4em; /* para corregir bordes redondeados, debería estar centrada, */
+    background-size: cover;
+}
+
+.item header {
+    padding: 1.5em 2em;
+}
+
+.actions {
+    display: flex;
+    gap: 1.5em;
+}
+
+button.btn-secundario {
+    background-color: var(--white);
+    color: var(--blue);
+    border: 1px solid var(--blue);
+    box-shadow: 1px 1px 1px black
+}
+
+@media (min-width: 60em){ /* 60em x 16px de la fuente base = 960px) */
+   
+    h1, h2, .title, .subtitle {
+        text-align: left;
+    }
+
+    .avatar {
+        max-width: 300px;
+        max-height: 300px;
+    }
+
+    .items .item {
+        grid-column: span 4;
+    }
+
+    .elements-with-images {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4em;
+    }
+
+    /*.elements-with-images.reverse {
+        flex-direction: row-reverse;
+    } /* Esta forma es válida pero implicaría agregar la clase reverse en el html donde corresponda y queda un poco más hardcodeada */
+
+    .text {
+        text-align: left; /* Acá no funciona, no entiendo por qué prioriza .elements-with-images .text (ya sea mobile o desktop) */
+        
+    }
+
+    .elements-with-images:nth-child(even) {
+        /* Con esta forma de hacerlo se logra lo mismo pudiendo escalarlo en caso de necesitar más elementos ya que lo aplica a todos los hijos "pares" del contenedor.*/
+        flex-direction: row-reverse;
+    }
+    
+    .elements-with-images .text {
+        flex: 1; /* Toma todo el espacio sobrante, dejando que las imagenes definan cuanto espacio necesitan ellas.*/
+        max-width: 100%;
+        align-self: center;
+        text-align: left;
+    }
+
+    .elements-with-images .images {
+        flex: 0 0 50%; /* No crezcan, no se achiquen y abarquen el 50% del espacio disponible*/
+        display: grid;
+        gap: 0px;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        grid-template-rows: repeat(2, minmax(0,1fr));
+        grid-template-areas: ". right-image"
+                            "left-image .";
+        /*Le asigna nombres a cada uno de los espacios dentro del grid, dejando el primero sin nombre y llamando "right-image" al segundo de la primer fila y a la inversa en la segunda*/
+    }
+
+    .elements-with-images .images img:first-child {
+        padding-left: 0px;        
+        grid-area: right-image;
+    }
+
+    .elements-with-images .images img:last-child {
+        padding-right: 0px;   
+        grid-area: left-image;
+    }
+
+    
+    .text-and-image {
+        padding-inline: 2em;
+    }
+   
+    .text-and-image .text {
+        /*flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0%; /* grow, shrink y basis de esta forma se puede resumir solo con la siguiente línea.*/
+        flex: 1;
+        /*text-align: left;*/
+    }
+
+    .text-and-image .main-content {
+        justify-items: start;
+        text-align: left;
+    }
+
+    .text-and-image {   
+        flex-direction: row;
+        align-items: stretch; /* "estira" todos los contenedores para igualar la altura del elemento con mayor altura del flexbox.*/
+    }
+
+    .reemplazo-grid {
+        flex-direction: row;
+    }
+
+    button {
+        font-size: 1em;
+        width: 12em;
+        height: 2.5em;
+        border-radius: 0.7em;
+        border-style: none;
+        box-shadow: 2px 2px 2px black
+    }
+
+}
